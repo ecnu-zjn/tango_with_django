@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Index{% endblock %}
+{% block body_block %}
+    <script src="{% static "js/rango_ajax.js" %}"></script>
+     <script>
+     $(document).ready(function(){
+         function getCookie(c_name)
+            {
+            if (document.cookie.length>0)
+              {
+              c_start=document.cookie.indexOf(c_name + "=")
+              if (c_start!=-1)
+                {
+                c_start=c_start + c_name.length+1
+                c_end=document.cookie.indexOf(";",c_start)
+                if (c_end==-1) c_end=document.cookie.length
+                return unescape(document.cookie.substring(c_start,c_end))
+                }
+              }
+            return ""
+            }
+       var n=getCookie('visits');
+       c=document.getElementById("visits");
+       c.innerText=n;
+       console.log( "document loaded" );
+     })
+     </script>
+    {% if user.is_authenticated %}
+    <div class="page-header">
+                <h1>Rango says... hello {{ user.username }}!</h1>
+            {% else %}
+                <h1>Rango says... hello world!</h1>
+            {% endif %}
+    </div>
+     <div class="row placeholders">
+            <div class="col-xs-12 col-sm-6 placeholder">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Categories</h3>
+                    </div>
+                </div>
+
+              {% if categories %}
+                    <ul class="list-group">
+                        {% for category in categories %}
+                         <li class="list-group-item"><a href="/rango/category/{{category.slug}}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <strong>There are no categories present.</strong>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-sm-6 placeholder">
+               <div class="panel panel-primary">
+                 <div class="panel-heading">
+                    <h3 class="panel-title">Pages</h3>
+                 </div>
+               </div>
+
+                {% if pages %}
+                    <ul class="list-group">
+                        {% for page in pages %}
+                         <li class="list-group-item"><a href="{{page.url}}">{{ page.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <strong>There are no categories present.</strong>
+                {% endif %}
+            </div>
+          </div>
+
+{#    <p>visits:{{ visits }}</p>#}
+    <p id="visits"></p>
+
+ {% endblock %}
+
